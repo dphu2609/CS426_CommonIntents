@@ -64,7 +64,32 @@ object IntentHandler {
         // Pass context to startActivity()
         context.startActivity(intent)
     }
-    fun onGoogleButtonClick(context: Context) {}
-    fun onCameraButtonClick(context: Context) {}
-    fun onPhotosButtonClick(context: Context) {}
+    fun onGoogleButtonClick(context: Context) {
+        val googleUrl = "https://www.google.com/" // Replace with your Google page URL
+
+        // Check if Google app is installed
+        val packageManager: PackageManager = context.packageManager
+        val intent = Intent(Intent.ACTION_VIEW)
+        try {
+            val googleAppId = packageManager.getApplicationInfo("com.google.android.googlequicksearchbox", 0).processName
+            if (googleAppId != null) {
+                intent.data = Uri.parse("https://www.google.com/")
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            // Google app is not installed, open in browser
+            intent.data = Uri.parse(googleUrl)
+        }
+
+        // Pass context to startActivity()
+        context.startActivity(intent)
+    }
+    fun onCameraButtonClick(context: Context) {
+        val intent = Intent("android.media.action.IMAGE_CAPTURE")
+        context.startActivity(intent)
+    }
+    fun onPhotosButtonClick(context: Context) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.type = "image/*"
+        context.startActivity(intent)
+    }
 }
